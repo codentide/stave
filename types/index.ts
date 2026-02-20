@@ -6,7 +6,7 @@ export const LyricSectionTypeEnum = z.enum(['INTRO', 'VERSO', 'CORO'])
 export const ReferenceTypeEnum = z.enum(['YOUTUBE', 'FILE'])
 
 // Utils
-const idSchema = z.string().min(1, 'El ID es requerido')
+const idSchema = z.uuid('ID inválido')
 const dateSchema = z.iso.datetime().optional()
 const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 
@@ -83,6 +83,7 @@ export const createProjectSchema = projectSchema.omit({
 
 export const createSongSchema = songSchema.omit({
   id: true,
+  projectId: true,
   sections: true,
   references: true,
   createdAt: true,
