@@ -1,16 +1,16 @@
 'use client'
 
-import { EmptyDashboardState, ProjectCard } from '@/components/features/hub'
-import { useProjects, useStaveActions } from '@/store/stave.store'
+import { EmptyDashboardState, HubCard } from '@/components/features/hub'
+import { useHubs, useStaveActions } from '@/store/stave.store'
 
 export default function DashboardPage() {
-  const projects = useProjects() || []
-  const { setActiveProjectId, createProject } = useStaveActions()
+  const hubs = useHubs() || []
+  const { setActiveHubId, createHub } = useStaveActions()
 
   // Provisional
   const handleCreateNew = () => {
-    createProject({
-      name: `VERTiGO #${projects.length + 1}`,
+    createHub({
+      name: `VERTiGO #${hubs.length + 1}`,
       type: 'EP',
       description: 'Nueva sesión de producción',
       color: '#F59E0B',
@@ -30,15 +30,15 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {projects.length === 0 ? (
+      {hubs.length === 0 ? (
         <EmptyDashboardState onCreate={handleCreateNew} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => setActiveProjectId(project.id)}
+          {hubs.map((hub) => (
+            <HubCard
+              key={hub.id}
+              hub={hub}
+              onClick={() => setActiveHubId(hub.id)}
             />
           ))}
         </div>

@@ -1,117 +1,119 @@
 import { create } from 'zustand'
 import {
-  CreateProjectInput,
+  createHubInput,
   CreateSongInput,
   LyricSection,
-  Project,
+  Hub,
   Song,
 } from '@/types'
 import { v4 as uuid } from 'uuid'
 
 interface Actions {
-  setActiveProjectId: (id: State['activeProjectId']) => void
-  createProject: (input: CreateProjectInput) => void
-  deleteProject: (id: Project['id']) => void
+  setActiveHubId: (id: State['activeHubId']) => void
+  createHub: (input: createHubInput) => void
+  deleteHub: (id: Hub['id']) => void
 
   setActiveSongId: (id: State['activeSongId']) => void
-  createSong: (projectId: Project['id'], input: CreateSongInput) => void
-  deleteSong: (projectId: Project['id'], id: Song['id']) => void
+  createSong: (hubId: Hub['id'], input: CreateSongInput) => void
+  deleteSong: (hubId: Hub['id'], id: Song['id']) => void
   updateSongLyrics: (
-    projectId: Project['id'],
-    songId: Project['id'],
+    hubId: Hub['id'],
+    songId: Hub['id'],
     sections: LyricSection[]
   ) => void
   updateSongMeta: (
-    projectId: Project['id'],
-    songId: Project['id'],
+    hubId: Hub['id'],
+    songId: Hub['id'],
     updates: Partial<Song>
   ) => void
 }
 
 interface State {
-  projects: Project[]
-  activeProjectId: Project['id'] | null
+  hubs: Hub[]
+  activeHubId: Hub['id'] | null
   activeSongId: Song['id'] | null
 
   actions: Actions
 }
 
 const useStaveStore = create<State>((set, get) => ({
-  projects: [],
-  activeProjectId: null,
+  hubs: [],
+  activeHubId: null,
   activeSongId: null,
 
   actions: {
-    setActiveProjectId: (id) => {
-      set({ activeProjectId: id, activeSongId: null })
+    setActiveHubId: (id) => {
+      set({ activeHubId: id, activeSongId: null })
     },
-    createProject: (input) => {
-      const newProject: Project = {
+    createHub: (input) => {
+      const newHub: Hub = {
         ...input,
+        name: input.name || 'Sin título',
         id: uuid(),
         songs: [],
         createdAt: new Date().toISOString(),
       }
       set((state) => ({
-        projects: [newProject, ...state.projects],
-        activeProjectId: newProject.id,
+        hubs: [newHub, ...state.hubs],
+        activeHubId: newHub.id,
       }))
+
+      return newHub
     },
-    deleteProject: (id) => {
-      const currentProjects = get().projects
-      const newProjects = currentProjects.filter((p) => p.id !== id)
+    deleteHub: (id) => {
+      const currentHubs = get().hubs
+      const newHubs = currentHubs.filter((p) => p.id !== id)
 
       set((state) => ({
-        projects: newProjects,
-        activeProjectId:
-          state.activeProjectId === id ? null : state.activeProjectId,
-        activeSongId: state.activeProjectId === id ? null : state.activeSongId,
+        hubs: newHubs,
+        activeHubId: state.activeHubId === id ? null : state.activeHubId,
+        activeSongId: state.activeHubId === id ? null : state.activeSongId,
       }))
     },
 
     setActiveSongId: (id) => set({ activeSongId: id }),
-    createSong: (projectId, input) => {
+    createSong: (hubId, input) => {
       const newSong: Song = {
         ...input,
         id: uuid(),
-        projectId,
+        hubId,
         sections: [],
         references: [],
         createdAt: new Date().toISOString(),
       }
-      const newProjects = get().projects.map((p) =>
-        p.id === projectId ? { ...p, songs: [...p.songs, newSong] } : p
+      const newHubs = get().hubs.map((p) =>
+        p.id === hubId ? { ...p, songs: [...p.songs, newSong] } : p
       )
 
-      set({ projects: newProjects, activeSongId: newSong.id })
+      set({ hubs: newHubs, activeSongId: newSong.id })
     },
-    deleteSong: (projectId, songId) => {
-      const newProjects = get().projects.map((p) =>
-        p.id === projectId
+    deleteSong: (hubId, songId) => {
+      const newHubs = get().hubs.map((p) =>
+        p.id === hubId
           ? { ...p, songs: p.songs.filter((s) => s.id !== songId) }
           : p
       )
 
       set((state) => ({
-        projects: newProjects,
+        hubs: newHubs,
         activeSongId: state.activeSongId === songId ? null : state.activeSongId,
       }))
     },
     // La edición de letras requiere una action propia por su complejidad
-    updateSongLyrics: (projectId, songId, sections) => {
-      const newProjects = get().projects.map((p) => {
-        if (p.id !== projectId) return p
+    updateSongLyrics: (hubId, songId, sections) => {
+      const newHubs = get().hubs.map((p) => {
+        if (p.id !== hubId) return p
         return {
           ...p,
           songs: p.songs.map((s) => (s.id === songId ? { ...s, sections } : s)),
         }
       })
 
-      set({ projects: newProjects })
+      set({ hubs: newHubs })
     },
-    updateSongMeta: (projectId, songId, updates) => {
-      const newProjects = get().projects.map((p) => {
-        if (p.id !== projectId) return p
+    updateSongMeta: (hubId, songId, updates) => {
+      const newHubs = get().hubs.map((p) => {
+        if (p.id !== hubId) return p
         return {
           ...p,
           songs: p.songs.map((s) =>
@@ -119,18 +121,18 @@ const useStaveStore = create<State>((set, get) => ({
           ),
         }
       })
-      set({ projects: newProjects })
+      set({ hubs: newHubs })
     },
   },
 }))
 
-export const useProjects = () => useStaveStore((s) => s.projects)
-export const useActiveProjectId = () => useStaveStore((s) => s.activeProjectId)
+export const useHubs = () => useStaveStore((s) => s.hubs)
+export const useActiveHubId = () => useStaveStore((s) => s.activeHubId)
 export const useActiveSong = () => useStaveStore((s) => s.activeSongId)
 
-export const useActiveProject = () => {
+export const useActiveHub = () => {
   return useStaveStore(
-    (s) => s.projects.find((p) => p.id === s.activeProjectId) || null
+    (s) => s.hubs.find((p) => p.id === s.activeHubId) || null
   )
 }
 

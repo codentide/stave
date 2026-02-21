@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Enums
-export const ProjectTypeEnum = z.enum(['ALBUM', 'EP', 'SINGLE'])
+export const HubTypeEnum = z.enum(['ALBUM', 'EP', 'SINGLE'])
 export const LyricSectionTypeEnum = z.enum(['INTRO', 'VERSO', 'CORO'])
 export const ReferenceTypeEnum = z.enum(['YOUTUBE', 'FILE'])
 
@@ -31,7 +31,7 @@ export const referenceSchema = z.object({
 // Big Schemas
 export const songSchema = z.object({
   id: idSchema,
-  projectId: idSchema.optional(),
+  hubId: idSchema.optional(),
   title: z.string().default('Nueva Canción'),
   bpm: z.number().int().min(20).max(300).default(120),
   key: z.string().max(10).default('C'),
@@ -41,41 +41,41 @@ export const songSchema = z.object({
   createdAt: dateSchema,
 })
 
-export const projectSchema = z
-  .object({
-    id: idSchema,
-    userId: z.string().optional(),
-    name: z.string().default('Nuevo Proyecto'),
-    description: z.string().optional(),
-    type: ProjectTypeEnum.default('ALBUM'),
-    // coverUrl: z.string().url().optional().or(z.literal('')),
-    color: z.string().regex(hexRegex, 'Hex inválido').optional(),
-    songs: z.array(songSchema).default([]),
-    createdAt: dateSchema,
-  })
-  .refine(
-    ({ type, songs }) => {
-      if (type === 'SINGLE' && songs.length > 1) return false
-      return true
-    },
-    {
-      message: 'Un proyecto de tipo SINGLE solo puede contener una canción',
-      path: ['songs'],
-    }
-  )
+export const hubSchemaBase = z.object({
+  id: idSchema,
+  userId: z.string().optional(),
+  name: z.string().default('Nuevo Proyecto'),
+  description: z.string().optional(),
+  type: HubTypeEnum.default('ALBUM'),
+  // coverUrl: z.string().url().optional().or(z.literal('')),
+  color: z.string().regex(hexRegex, 'Hex inválido').default('#d9933f'),
+  songs: z.array(songSchema).default([]),
+  createdAt: dateSchema,
+})
+
+export const hubSchema = hubSchemaBase.refine(
+  ({ type, songs }) => {
+    if (type === 'SINGLE' && songs.length > 1) return false
+    return true
+  },
+  {
+    message: 'Un proyecto de tipo SINGLE solo puede contener una canción',
+    path: ['songs'],
+  }
+)
 
 // Inferences
-export type ProjectType = z.infer<typeof ProjectTypeEnum>
+export type HubType = z.infer<typeof HubTypeEnum>
 export type LyricSectionType = z.infer<typeof LyricSectionTypeEnum>
 export type ReferenceType = z.infer<typeof ReferenceTypeEnum>
 
 export type LyricSection = z.infer<typeof lyricSectionSchema>
 export type Reference = z.infer<typeof referenceSchema>
 export type Song = z.infer<typeof songSchema>
-export type Project = z.infer<typeof projectSchema>
+export type Hub = z.infer<typeof hubSchema>
 
 // Contracts
-export const createProjectSchema = projectSchema.omit({
+export const createHubSchema = hubSchemaBase.omit({
   id: true,
   songs: true,
   createdAt: true,
@@ -83,11 +83,11 @@ export const createProjectSchema = projectSchema.omit({
 
 export const createSongSchema = songSchema.omit({
   id: true,
-  projectId: true,
+  hubId: true,
   sections: true,
   references: true,
   createdAt: true,
 })
 
-export type CreateProjectInput = z.infer<typeof createProjectSchema>
+export type createHubInput = z.infer<typeof createHubSchema>
 export type CreateSongInput = z.infer<typeof createSongSchema>

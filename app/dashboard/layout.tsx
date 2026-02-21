@@ -1,5 +1,6 @@
 'use client'
 
+import { CreateHubModal } from '@/components/features/hub/CreateHubModal'
 import { Sidebar } from '@/components/shared'
 
 interface Props {
@@ -13,6 +14,7 @@ export default function DashboardContent({ children }: Props) {
       <main className="flex-1 flex flex-col h-full min-h-screen bg-muted/50 dark:bg-background overflow-hidden pl-64 ">
         {children}
       </main>
+      <CreateHubModal />
     </div>
   )
 }

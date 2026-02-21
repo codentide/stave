@@ -1,29 +1,33 @@
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { getRelativeTime } from '@/lib/utils/date.utils'
 import { capitalize } from '@/lib/utils/format.utils'
-import { Project } from '@/types'
-import { Clock, MoreVertical, Music4 } from 'lucide-react'
+import { Hub } from '@/types'
+import { Clock } from 'lucide-react'
 
-export const ProjectCard = ({
-  project,
+export const HubCard = ({
+  hub,
   onClick,
 }: {
-  project: Project
+  hub: Hub
   onClick: () => void
 }) => {
-  const relativeCreatedAt = getRelativeTime(project.createdAt)
-  console.log(relativeCreatedAt)
+  const relativeCreatedAt = getRelativeTime(hub.createdAt)
   return (
     <Card
-      className="group cursor-pointer border-border dark:border-border/50 hover:border-primary/25 dark:hover:border-primary/25 transition-all duration-300 
-      hover:shadow-[0_0_40px_0px_rgba(235,158,71,0.05)] p-5 shadow-none"
+      className={cn(
+        'group p-5',
+        'dark:border-border/50 dark:hover:border-primary/25',
+        'border-border hover:border-primary/25',
+        'hover:shadow-[0_0_40px_0px_rgba(235,158,71,0.05)] shadow-none',
+        'cursor-pointer transition-all duration-300 '
+      )}
       onClick={onClick}
     >
       <CardHeader className="p-0">
@@ -31,8 +35,8 @@ export const ProjectCard = ({
           <div
             className="w-10 h-10 rounded-lg flex items-center justify-center"
             style={{
-              backgroundColor: `${project.color}16`,
-              color: project.color,
+              backgroundColor: `${hub.color}16`,
+              color: hub.color,
             }}
           >
             <Music4 className="w-5 h-5" />
@@ -47,10 +51,10 @@ export const ProjectCard = ({
         </div> */}
         <div>
           <CardTitle className="text-[16px] font-bold text-foreground/60 dark:text-foreground/72 group-hover:text-primary dark:group-hover:text-primary transition-colors">
-            {project.name}
+            {hub.name}
           </CardTitle>
           <CardDescription className="text-xs font-light line-clamp-1 mt-1 text-foreground/40">
-            {project.description || 'Sin descripción'}
+            {hub.description || 'Sin descripción...'}
           </CardDescription>
         </div>
       </CardHeader>
@@ -62,7 +66,7 @@ export const ProjectCard = ({
           </span>
         </div>
         <small className="w-fit px-2 rounded-sm text-[12px] line-clamp-1 text-foreground/32 bg-muted/36 capitalize">
-          {project.type}
+          {hub.type}
         </small>
       </CardContent>
     </Card>

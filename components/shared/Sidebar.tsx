@@ -4,21 +4,19 @@ import { FolderMinusIcon, Mic2, Plus, Disc } from 'lucide-react'
 import { ScrollArea, Separator, Button } from '@/components/ui'
 import { ThemeToggler, Tooltip } from './'
 import { cn } from '@/lib/utils/ui.utils'
-import {
-  useActiveProjectId,
-  useProjects,
-  useStaveActions,
-} from '@/store/stave.store'
+import { useActiveHubId, useHubs, useStaveActions } from '@/store/stave.store'
+import { useCreateModalActions } from '@/store/create-modal.store'
 
 export const Sidebar = () => {
-  const projects = useProjects()
-  const activeProjectId = useActiveProjectId()
-  const { setActiveProjectId, createProject } = useStaveActions()
+  const hubs = useHubs()
+  const activeHubId = useActiveHubId()
+  const { setActiveHubId, createHub } = useStaveActions()
+  const { open: openCreateHubModal } = useCreateModalActions()
 
-  const handleCreateProject = () => {
-    const projectCount = projects.length + 1
-    createProject({
-      name: `Proyecto #${projectCount}`,
+  const handleCreateHub = () => {
+    const hubsCount = hubs.length + 1
+    createHub({
+      name: `Proyecto #${hubsCount}`,
       type: 'ALBUM',
       description: 'Sesión de composición activa',
       color: '#F59E0B',
@@ -50,15 +48,15 @@ export const Sidebar = () => {
       <div className="px-3 py-4">
         <nav className="flex flex-col gap-1">
           <Button
-            variant={!activeProjectId ? 'secondary' : 'ghost'}
+            variant={!activeHubId ? 'secondary' : 'ghost'}
             size="sm"
             className="w-full justify-start gap-3"
-            onClick={() => setActiveProjectId(null)}
+            onClick={() => setActiveHubId(null)}
           >
             <LayoutDashboard
               className={cn(
                 'w-4 h-4',
-                activeProjectId === null ? 'text-primary' : 'opacity-70'
+                activeHubId === null ? 'text-primary' : 'opacity-70'
               )}
             />
             Dashboard
@@ -88,7 +86,7 @@ export const Sidebar = () => {
               variant="ghost"
               size="icon"
               className="h-7 w-7 text-muted-foreground hover:text-primary transition-colors"
-              onClick={handleCreateProject}
+              onClick={() => openCreateHubModal()}
             >
               <Plus className="w-5 h-5" />
             </Button>
@@ -97,21 +95,21 @@ export const Sidebar = () => {
 
         <ScrollArea className="flex-1 px-3">
           <div className="space-y-1 pb-4">
-            {projects.length === 0 ? (
+            {hubs.length === 0 ? (
               <div className="px-4 py-8 text-center border border-dashed border-border rounded-lg mx-1 opacity-50">
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   No hay proyectos activos.
                 </p>
               </div>
             ) : (
-              projects.map((project) => {
-                const isActive = activeProjectId === project.id
+              hubs.map((hubs) => {
+                const isActive = activeHubId === hubs.id
                 return (
                   <Button
-                    key={project.id}
+                    key={hubs.id}
                     variant={isActive ? 'secondary' : 'ghost'}
                     size="sm"
-                    onClick={() => setActiveProjectId(project.id)}
+                    onClick={() => setActiveHubId(hubs.id)}
                     className={cn(
                       'w-full justify-start gap-3 font-normal group relative transition-all',
                       isActive &&
@@ -127,7 +125,7 @@ export const Sidebar = () => {
                       )}
                     />
                     <span className="truncate flex-1 text-left">
-                      {project.name}
+                      {hubs.name}
                     </span>
                     {isActive && (
                       <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
