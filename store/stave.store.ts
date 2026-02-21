@@ -9,11 +9,11 @@ import {
 import { v4 as uuid } from 'uuid'
 
 interface Actions {
-  setActiveProjectId: (id: Project['id']) => void
+  setActiveProjectId: (id: State['activeProjectId']) => void
   createProject: (input: CreateProjectInput) => void
   deleteProject: (id: Project['id']) => void
 
-  setActiveSongId: (id: Song['id']) => void
+  setActiveSongId: (id: State['activeSongId']) => void
   createSong: (projectId: Project['id'], input: CreateSongInput) => void
   deleteSong: (projectId: Project['id'], id: Song['id']) => void
   updateSongLyrics: (
