@@ -114,8 +114,3 @@
 button {
   cursor: pointer !important;
 }
-
-body::selection {
-  background-color: var(--color-primary);
-  color: oklch(24.215% 0.05317 67.873);
-}

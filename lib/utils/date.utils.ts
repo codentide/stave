@@ -1,4 +1,4 @@
-import { formatDistanceToNow, isValid, parseISO } from 'date-fns'
+import { formatDistanceToNow, isValid, Locale, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 export const ensureDate = (
@@ -10,13 +10,14 @@ export const ensureDate = (
 }
 
 export const getRelativeTime = (
-  date: string | Date | undefined | null
+  date: string | Date | undefined | null,
+  config: { addSuffix?: boolean; locale: Locale } = {
+    addSuffix: false,
+    locale: es,
+  }
 ): string => {
   const newDate = ensureDate(date)
   if (!newDate) return 'Sin fecha'
 
-  return formatDistanceToNow(newDate, {
-    addSuffix: false,
-    locale: es,
-  })
+  return formatDistanceToNow(newDate, config)
 }

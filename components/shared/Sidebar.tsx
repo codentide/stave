@@ -7,6 +7,7 @@ import { useCreateModalActions } from '@/store/create-modal.store'
 import { useActiveHubId, useHubs, useStaveActions } from '@/store/stave.store'
 import { Mic2, Plus } from 'lucide-react'
 import { ThemeToggler, Tooltip } from './'
+import Link from 'next/link'
 
 export const Sidebar = () => {
   const hubs = useHubs()
@@ -20,7 +21,9 @@ export const Sidebar = () => {
       <div className="flex items-center justify-between p-4 ">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Mic2 className="text-primary-foreground w-4.5 h-4.5" />
+            <Link href="/dashboard">
+              <Mic2 className="text-primary-foreground w-4.5 h-4.5" />
+            </Link>
           </div>
           <div className="flex">
             <h1 className="flex items-center gap-1 text-md leading-none mt-1 font-semibold text-foreground font-serif">

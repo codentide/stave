@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${sans.variable} ${serif.variable} antialiased font-sans`}
+        className={`${sans.variable} ${serif.variable} antialiased font-sans selection:bg-primary selection:text-primary-foreground`}
       >
         <ThemeProvider
           attribute="class"

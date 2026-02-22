@@ -3,6 +3,13 @@ import { z } from 'zod'
 // Enums
 export const HubTypeEnum = z.enum(['ALBUM', 'EP', 'SINGLE'])
 export const LyricSectionTypeEnum = z.enum(['INTRO', 'VERSO', 'CORO'])
+export const SongStatusTypeEnum = z.enum([
+  'IDEA',
+  'DRAFT',
+  'IN PROGRESS',
+  'REVISION',
+  'ENDED',
+])
 export const ReferenceTypeEnum = z.enum(['YOUTUBE', 'FILE'])
 
 // Utils
@@ -33,7 +40,8 @@ export const songSchema = z.object({
   id: idSchema,
   hubId: idSchema.optional(),
   title: z.string().default('Nueva Canción'),
-  bpm: z.number().int().min(20).max(300).default(120),
+  status: SongStatusTypeEnum.default('DRAFT'),
+  bpm: z.number().int().min(20).max(300).default(120).optional,
   key: z.string().max(10).default('C'),
   tags: z.array(z.string()).default([]),
   sections: z.array(lyricSectionSchema).default([]),

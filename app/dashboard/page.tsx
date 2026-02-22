@@ -10,7 +10,7 @@ export default function DashboardPage() {
   const { open: openCreateHubModal } = useCreateModalActions()
 
   return (
-    <div className="max-w-6xl w-full px-8 py-12 mx-auto overflow-y-auto custom-scrollbar">
+    <div className="max-w-5xl w-full px-8 py-12 mx-auto overflow-y-auto custom-scrollbar">
       <header className="mb-10 flex items-end justify-between">
         <div>
           <h1 className="text-3xl font-bold leading-none mb-2 font-serif italic">
