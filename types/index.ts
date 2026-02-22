@@ -41,11 +41,12 @@ export const songSchema = z.object({
   hubId: idSchema.optional(),
   title: z.string().default('Nueva Canción'),
   status: SongStatusTypeEnum.default('DRAFT'),
-  bpm: z.number().int().min(20).max(300).default(120).optional,
+  bpm: z.number().int().min(20).max(300).default(120),
   key: z.string().max(10).default('C'),
   tags: z.array(z.string()).default([]),
   sections: z.array(lyricSectionSchema).default([]),
   references: z.array(referenceSchema).default([]),
+  coverUrl: z.string().optional(),
   createdAt: dateSchema,
 })
 
@@ -53,7 +54,7 @@ export const hubSchemaBase = z.object({
   id: idSchema,
   userId: z.string().optional(),
   name: z.string().default('Nuevo Proyecto'),
-  description: z.string().optional(),
+  description: z.string().default(''),
   type: HubTypeEnum.default('ALBUM'),
   // coverUrl: z.string().url().optional().or(z.literal('')),
   color: z.string().regex(hexRegex, 'Hex inválido').default('#d9933f'),

@@ -1,12 +1,12 @@
 'use client'
 
 import { EmptyHubCardState, HubCard } from '@/components/features/hub'
-import { useCreateModalActions } from '@/store/create-modal.store'
-import { useHubs, useStaveActions } from '@/store/stave.store'
+
+import { useHubs, useSetActiveHubId, useCreateModalActions } from '@/atoms'
 
 export default function DashboardPage() {
   const hubs = useHubs() || []
-  const { setActiveHubId } = useStaveActions()
+  const setActiveHubId = useSetActiveHubId()
   const { open: openCreateHubModal } = useCreateModalActions()
 
   return (
@@ -27,7 +27,7 @@ export default function DashboardPage() {
           {hubs.map((hub) => (
             <HubCard
               key={hub.id}
-              hub={hub}
+              content={hub}
               onClick={() => setActiveHubId(hub.id)}
             />
           ))}

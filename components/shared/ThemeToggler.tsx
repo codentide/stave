@@ -18,20 +18,18 @@ export function ThemeToggler() {
     setTheme(isDarkTheme ? 'light' : 'dark')
   }
 
+  const Icon = isDarkTheme ? Sun : Moon
+
   return (
     <Button
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="h-8 w-8 rounded-md hover:bg-accent transition-colors"
+      className="h-8 w-8 rounded-md hover:bg-background/20 transition-colors"
       title="Cambiar tema"
     >
       <div className="grid place-items-center h-5 w-5">
-        {isDarkTheme ? (
-          <Moon className="text-foreground/50 h-full w-full scale-0 dark:scale-100" />
-        ) : (
-          <Sun className="text-foreground/50 h-full w-full scale-100 dark:scale-0" />
-        )}
+        <Icon className="text-foreground/50 h-full w-full" />
       </div>
       <span className="sr-only">Alternar tema</span>
     </Button>

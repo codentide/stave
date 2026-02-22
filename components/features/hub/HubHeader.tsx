@@ -1,34 +1,65 @@
 'use client'
 
-import { EditableText } from '@/components/shared'
-import { Button, Separator } from '@/components/ui'
+import {
+  ActionMenu,
+  ColorPickerPopoverButton,
+  EditableText,
+} from '@/components/shared'
+import { Separator } from '@/components/ui'
 import { getRelativeTime } from '@/lib/utils'
-import { useStaveActions } from '@/store/stave.store'
+import { useUpdateHubMeta, useDeleteHub } from '@/atoms'
 import { Hub } from '@/types'
-import { Clock, MoreHorizontal } from 'lucide-react'
+import { Clock, Trash2 } from 'lucide-react'
+import { PageBreadcrumb } from '@/components/shared/PageBreadcrumb'
 
 interface Props {
-  content: Pick<Hub, 'id' | 'name' | 'description' | 'type' | 'createdAt'> | Hub
+  content:
+    | Pick<Hub, 'id' | 'name' | 'description' | 'type' | 'createdAt' | 'color'>
+    | Hub
 }
 
 export const HubHeader = ({ content }: Props) => {
-  const { id, name, type, description, createdAt } = content
-  const { updateHubMeta } = useStaveActions()
+  const { id, name, type, description, createdAt, color } = content
+  const updateHubMeta = useUpdateHubMeta()
+  const deleteHub = useDeleteHub()
+
+  const handleChangeColor = (newColor: string) => {
+    updateHubMeta(id, { color: newColor })
+  }
+
+  const handleDeleteHub = () => {
+    deleteHub(id)
+  }
+
+  const menuActions = [
+    {
+      label: 'Borrar Hub',
+      icon: Trash2,
+      onClick: handleDeleteHub,
+      variant: 'destructive' as const,
+    },
+  ]
+
+  const BreadcrumbItems = [
+    { label: 'Dashboard', href: '/dashboard' },
+    { label: name },
+  ]
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex items-center justify-between mb-2">
-        <small className="text-xs text-primary">{type}</small>
-        {/* [ ]: Menú de opciones (cambiar color & borrar) */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6 text-muted-foreground/80 hover:text-primary transition-colors"
-        >
-          <MoreHorizontal />
-        </Button>
+      <div className="flex items-center justify-between mb-8">
+        <PageBreadcrumb items={BreadcrumbItems} />
+        <div className="flex items-center gap-2">
+          <ColorPickerPopoverButton
+            value={color}
+            onChange={handleChangeColor}
+          />
+          <ActionMenu actions={menuActions} color={color} />
+        </div>
       </div>
       <div className="flex flex-col gap-0.5">
+        <small className="text-xs text-primary mb-2">{type}</small>
+
         <EditableText
           className="text-3xl font-bold leading-none font-serif italic -ml-0.5 tracking-wider"
           value={name}
@@ -51,6 +82,7 @@ export const HubHeader = ({ content }: Props) => {
           Creado {getRelativeTime(createdAt)}
         </span>
         <span className="text-xs text-foreground/16 font-bold">•</span>
+        {/* [ ]: Crear updatedAd */}
         <span className="font-light text-xs leading-[1.6]">
           Actualizado {getRelativeTime(createdAt)}
         </span>

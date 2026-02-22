@@ -12,4 +12,9 @@
 // export * from './ExportButton';
 
 export * from './SongCollection'
+export * from './SongCard'
 export * from './EmptySongCardState'
+export * from './SongHeader'
+export * from './SongLyrics'
+export * from './SongReferences'
+export * from './SongTag'

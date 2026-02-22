@@ -56,7 +56,7 @@ export const HubTypeField = React.memo(({
               <Field>
                 <FieldContent className="flex flex-row items-center gap-3 p-3">
                   <div
-                    className={`p-2.5 rounded-sm bg-accent/50 
+                    className={`p-2.5 rounded-sm bg-background/30 
                       group-has-data-[state=checked]/field-label:text-(--hub-selected-color)
                       group-has-data-[state=checked]/field-label:bg-(--hub-selected-color)/10
                       transition-colors

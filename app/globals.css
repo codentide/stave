@@ -45,6 +45,10 @@
 }
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   :root {
     --radius: 0.625rem;
 
@@ -113,4 +117,18 @@
 
 button {
   cursor: pointer !important;
+}
+
+@layer utilities {
+  .no-number-arrows {
+    -moz-appearance: textfield;
+    appearance: none;
+  }
+  .no-number-arrows::-webkit-inner-spin-button,
+  .no-number-arrows::-webkit-outer-spin-button {
+    appearance: none;
+  }
+  .custom-scrollbar {
+    scrollbar-gutter: stable;
+  }
 }

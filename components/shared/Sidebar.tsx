@@ -3,8 +3,8 @@
 import { Button, ScrollArea, Separator } from '@/components/ui'
 import { HUB_TYPE_ICONS } from '@/lib/constants/hub.constant'
 import { cn } from '@/lib/utils/ui.utils'
-import { useCreateModalActions } from '@/store/create-modal.store'
-import { useActiveHubId, useHubs, useStaveActions } from '@/store/stave.store'
+import { useCreateModalActions } from '@/atoms'
+import { useActiveHubId, useHubs, useSetActiveHubId } from '@/atoms'
 import { Mic2, Plus } from 'lucide-react'
 import { ThemeToggler, Tooltip } from './'
 import Link from 'next/link'
@@ -12,7 +12,7 @@ import Link from 'next/link'
 export const Sidebar = () => {
   const hubs = useHubs()
   const activeHubId = useActiveHubId()
-  const { setActiveHubId } = useStaveActions()
+  const setActiveHubId = useSetActiveHubId()
   const { open: openCreateHubModal } = useCreateModalActions()
 
   return (
@@ -58,7 +58,7 @@ export const Sidebar = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start gap-3 text-muted-foreground"
+            className="w-full justify-start gap-3 text-foreground/64"
           >
             <Search className="w-4 h-4 opacity-70" />
             Explorar
@@ -71,7 +71,7 @@ export const Sidebar = () => {
       {/* Listado de Proyectos */}
       <div className="flex-1 flex flex-col min-h-0 py-4">
         <div className="px-6 mb-4 flex items-center justify-between">
-          <h2 className="text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
+          <h2 className="text-[12px] text-foreground/64 uppercase tracking-[0.2em]">
             Proyectos
           </h2>
           {/* Botón de crear nuevo proyecto */}
@@ -79,7 +79,7 @@ export const Sidebar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-muted-foreground hover:text-primary transition-colors"
+              className="h-7 w-7 text-foreground/64 hover:text-primary transition-colors"
               onClick={() => openCreateHubModal()}
             >
               <Plus className="w-5 h-5" />
@@ -91,7 +91,7 @@ export const Sidebar = () => {
           <div className="space-y-1 pb-4">
             {hubs.length === 0 ? (
               <div className="px-4 py-8 text-center border border-dashed border-border rounded-lg mx-1 opacity-50">
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-foreground/64 leading-relaxed">
                   No hay proyectos activos.
                 </p>
               </div>
@@ -116,7 +116,7 @@ export const Sidebar = () => {
                         'w-4 h-4 shrink-0 transition-colors',
                         isActive
                           ? 'text-primary'
-                          : 'text-muted-foreground group-hover:text-foreground'
+                          : 'text-foreground/64 group-hover:text-foreground'
                       )}
                     />
                     <span className="truncate flex-1 text-left">
@@ -138,10 +138,10 @@ export const Sidebar = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
+          className="w-full justify-start gap-3 text-foreground/64 hover:text-foreground"
         >
           <div className="w-7 h-7 rounded-full bg-secondary border border-border flex items-center justify-center">
-            <Music2 className="w-3.5 h-3.5 text-muted-foreground" />
+            <Music2 className="w-3.5 h-3.5 text-foreground/64" />
           </div>
           <span className="text-xs font-medium">Configuración</span>
           <Settings className="ml-auto w-3.5 h-3.5 opacity-40" />

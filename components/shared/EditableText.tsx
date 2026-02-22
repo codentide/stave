@@ -13,20 +13,26 @@ interface Props extends Omit<BaseProps, 'onChange' | 'value' | 'rows'> {
   onChange: (value: string) => void
   multiline?: boolean
   rows?: number
+  debounceTime?: number
 }
 
-export const EditableText = ({ 
-  value, 
-  onChange, 
+export const EditableText = ({
+  value,
+  onChange,
   multiline = false,
   rows = 2,
-  className = "",
+  className = '',
   maxLength = 255,
-  placeholder = "",
+  placeholder = '',
+  debounceTime = 600,
   ...props
 }: Props) => {
   const [text, setText] = useState(value)
-  const debText = useDebounce(text, 600)
+  const debText = useDebounce(text, debounceTime)
+
+  useEffect(() => {
+    setText(value)
+  }, [value])
 
   useEffect(() => {
     if (debText !== value) {
@@ -44,7 +50,9 @@ export const EditableText = ({
       rows={multiline ? rows : undefined}
       placeholder={placeholder}
       className={cn(
-        'w-full h-fit p-0! bg-transparent! border-none shadow-none rounded-none! resize-none! min-h-0! field-sizing-content! focus:outline-0! focus:border-0! focus:ring-0!',
+        'w-full h-fit p-0 bg-transparent border-none rounded-none',
+        'resize-none field-sizing-content',
+        'hover:underline focus:underline underline-offset-5 decoration-1 decoration-foreground/50',
         className
       )}
       {...props}

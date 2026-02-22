@@ -16,10 +16,10 @@ import {
 } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import {
+  useCreateHub,
   useCreateModalActions,
   useCreateModalIsOpen,
-} from '@/store/create-modal.store'
-import { useStaveActions } from '@/store/stave.store'
+} from '@/atoms'
 import { createHubInput } from '@/types'
 import { useState } from 'react'
 import { HubTypeEnum } from '@/types'
@@ -41,7 +41,7 @@ export const CreateHubModal = ({ onOpenChange }: Props) => {
   const [formData, setFormData] = useState<createHubInput>(initalFormData)
   const isOpen = useCreateModalIsOpen()
 
-  const { createHub } = useStaveActions()
+  const createHub = useCreateHub()
   const { close } = useCreateModalActions()
 
   const handleOpenChange = () => {

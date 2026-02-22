@@ -17,8 +17,8 @@ export const EmptySongCardState = ({ className, onCreate }: Props) => (
     )}
     onClick={onCreate}
   >
-    <div className="w-6 h-6 bg-muted/30 rounded-full flex items-center justify-center border border-border/20 group-hover:bg-primary transition-colors duration-200">
-      <Plus className="w-4 h-4 text-muted-foreground/50 group-hover:text-background" />
+    <div className="w-6 h-6 bg-background/30 rounded-full flex items-center justify-center border border-border/20 group-hover:bg-primary transition-colors duration-200">
+      <Plus className="w-4 h-4 text-foreground/50 group-hover:text-background" />
     </div>
     <h3 className="text-sm font-light text-foreground/40 group-hover:text-primary">
       Nueva Canción

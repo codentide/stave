@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ThemeProvider } from '@/components/providers'
+import { ErrorBoundary, ThemeProvider } from '@/components/providers'
 import { serif, sans } from './fonts'
 import './globals.css'
 
@@ -18,14 +18,16 @@ export default function RootLayout({
       <body
         className={`${sans.variable} ${serif.variable} antialiased font-sans selection:bg-primary selection:text-primary-foreground`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )
