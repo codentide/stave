@@ -16,7 +16,7 @@ export const getRelativeTime = (
   if (!newDate) return 'Sin fecha'
 
   return formatDistanceToNow(newDate, {
-    addSuffix: true,
+    addSuffix: false,
     locale: es,
   })
 }

@@ -1,27 +1,18 @@
 'use client'
 
-import { FolderMinusIcon, Mic2, Plus, Disc } from 'lucide-react'
-import { ScrollArea, Separator, Button } from '@/components/ui'
-import { ThemeToggler, Tooltip } from './'
+import { Button, ScrollArea, Separator } from '@/components/ui'
+import { HUB_TYPE_ICONS } from '@/lib/constants/hub.constant'
 import { cn } from '@/lib/utils/ui.utils'
-import { useActiveHubId, useHubs, useStaveActions } from '@/store/stave.store'
 import { useCreateModalActions } from '@/store/create-modal.store'
+import { useActiveHubId, useHubs, useStaveActions } from '@/store/stave.store'
+import { Mic2, Plus } from 'lucide-react'
+import { ThemeToggler, Tooltip } from './'
 
 export const Sidebar = () => {
   const hubs = useHubs()
   const activeHubId = useActiveHubId()
-  const { setActiveHubId, createHub } = useStaveActions()
+  const { setActiveHubId } = useStaveActions()
   const { open: openCreateHubModal } = useCreateModalActions()
-
-  const handleCreateHub = () => {
-    const hubsCount = hubs.length + 1
-    createHub({
-      name: `Proyecto #${hubsCount}`,
-      type: 'ALBUM',
-      description: 'Sesión de composición activa',
-      color: '#F59E0B',
-    })
-  }
 
   return (
     <aside className="fixed w-64 h-screen bg-card border-r border-border flex flex-col shrink-0 select-none">
@@ -32,8 +23,8 @@ export const Sidebar = () => {
             <Mic2 className="text-primary-foreground w-4.5 h-4.5" />
           </div>
           <div className="flex">
-            <h1 className="flex items-center gap-1 text-md leading-none mt-1 font-medium text-foreground font-serif">
-              <span>STAVE</span>
+            <h1 className="flex items-center gap-1 text-md leading-none mt-1 font-semibold text-foreground font-serif">
+              <span>Stave Hub</span>
             </h1>
           </div>
         </div>
@@ -102,21 +93,22 @@ export const Sidebar = () => {
                 </p>
               </div>
             ) : (
-              hubs.map((hubs) => {
-                const isActive = activeHubId === hubs.id
+              hubs.map((hub) => {
+                const Icon = HUB_TYPE_ICONS[hub.type]
+                const isActive = activeHubId === hub.id
                 return (
                   <Button
-                    key={hubs.id}
+                    key={hub.id}
                     variant={isActive ? 'secondary' : 'ghost'}
                     size="sm"
-                    onClick={() => setActiveHubId(hubs.id)}
+                    onClick={() => setActiveHubId(hub.id)}
                     className={cn(
                       'w-full justify-start gap-3 font-normal group relative transition-all',
                       isActive &&
                         'text-primary bg-primary/10 hover:bg-primary/15'
                     )}
                   >
-                    <Disc
+                    <Icon
                       className={cn(
                         'w-4 h-4 shrink-0 transition-colors',
                         isActive
@@ -125,7 +117,7 @@ export const Sidebar = () => {
                       )}
                     />
                     <span className="truncate flex-1 text-left">
-                      {hubs.name}
+                      {hub.name}
                     </span>
                     {isActive && (
                       <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />

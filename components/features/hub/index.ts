@@ -1,2 +1,2 @@
 export * from './HubCard'
-export * from './EmptyDashboardState'
+export * from './EmptyHubCardState'

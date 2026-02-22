@@ -49,7 +49,7 @@ export const HubColorField = React.memo(({
               style={
                 {
                   '--selected-color': `${color}75`,
-                  backgroundColor: color,
+                  backgroundColor: color
                 } as React.CSSProperties
               }
             />
