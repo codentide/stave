@@ -14,8 +14,8 @@ export const SongCollection = ({ hubId, items = [] }: Props) => {
   const handleCreate = () => {
     const newSong: CreateSongInput = {
       title: 'New Song',
-      key: '',
-      bpm: 0,
+      key: 'C',
+      bpm: 120,
       status: 'DRAFT',
       tags: [],
     }
