@@ -1,26 +1,134 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Sidebar (Shadcn) */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Radios */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: var(--google-font-sans);
+  --font-serif: var(--google-font-serif);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --radius: 0.625rem;
+
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.141 0.005 285.823);
+
+    --primary: oklch(70.865% 0.1581 61.015);
+    --primary-foreground: oklch(1 0 0);
+
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.141 0.005 285.823);
+
+    --muted: oklch(0.967 0.001 286.375);
+    --muted-foreground: oklch(0.552 0.016 285.938);
+
+    --accent: oklch(0.967 0.001 286.375);
+    --accent-foreground: var(--primary);
+
+    --border: oklch(0.92 0.004 286.32);
+    --input: oklch(0.92 0.004 286.32);
+    --ring: var(--primary);
+
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.141 0.005 285.823);
+    --sidebar-border: oklch(0.92 0.004 286.32);
+    --sidebar-primary: var(--primary);
+  }
+
+  .dark {
+    --background: oklch(0.126 0 0);
+    --foreground: oklch(0.985 0 0);
+
+    --card: oklch(0.173 0 0);
+    --card-foreground: oklch(0.985 0 0);
+
+    --primary: rgba(235, 158, 71, 0.2);
+    --primary: oklch(74.499% 0.15418 63.485);
+    --primary-foreground: oklch(0.126 0 0);
+
+    --muted: oklch(0.274 0.006 286.033);
+    --muted-foreground: oklch(0.705 0.015 286.067);
+
+    --accent: oklch(0.274 0.006 286.033);
+    --accent-foreground: oklch(0.985 0 0);
+
+    --border: oklch(1 0 0 / 12%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: var(--primary);
+
+    --sidebar: oklch(0.173 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-primary: var(--primary);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--google-font-sans), sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Después de cerrar el bloque @theme inline */
+
+button {
+  cursor: pointer !important;
+}
+
+@layer utilities {
+  .no-number-arrows {
+    -moz-appearance: textfield;
+    appearance: none;
+  }
+  .no-number-arrows::-webkit-inner-spin-button,
+  .no-number-arrows::-webkit-outer-spin-button {
+    appearance: none;
+  }
+  .custom-scrollbar {
+    scrollbar-gutter: stable;
+  }
 }

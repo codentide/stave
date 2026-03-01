@@ -1,0 +1,15 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "at-rule-no-unknown": null,
+    "function-no-unknown": null,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": [
+          "scrollbar-gutter"
+        ]
+      }
+    ]
+  }
+}
