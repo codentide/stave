@@ -33,6 +33,7 @@ type FormField = keyof createHubInput
 
 const initalFormData = {
   name: '',
+  description: 'Sin descripción',
   type: HubTypeEnum.enum.ALBUM,
   color: HUB_COLOR_VALUES[0],
 }
