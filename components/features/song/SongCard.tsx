@@ -122,7 +122,7 @@ const SongIcon = ({ coverUrl }: { coverUrl?: string }) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-center w-12 h-12 rounded-lg border',
+        'flex items-center justify-center aspect-square h-full shrink-0',
         'bg-foreground/8 border-foreground/4',
         'dark:bg-foreground/2 dark:border-foreground/4',
         'group-hover:bg-foreground/8',
