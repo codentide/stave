@@ -54,7 +54,7 @@ export const hubSchemaBase = z.object({
   id: idSchema,
   userId: z.string().optional(),
   name: z.string().default('Nuevo Proyecto'),
-  description: z.string().default(''),
+  description: z.string().default('Sin descripción'),
   type: HubTypeEnum.default('ALBUM'),
   // coverUrl: z.string().url().optional().or(z.literal('')),
   color: z.string().regex(hexRegex, 'Hex inválido').default('#d9933f'),
