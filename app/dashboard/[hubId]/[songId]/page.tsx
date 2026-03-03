@@ -3,6 +3,7 @@
 import { createSongPageAtoms, useHubs } from '@/atoms'
 import { SongPageProvider } from '@/atoms/providers/song-page.provider'
 import { SongHeader, SongLyrics } from '@/components/features/song'
+import { SongAudio } from '@/components/features/audio'
 import { createCustomStyles } from '@/lib/utils/ui.utils'
 import { Hub, Song } from '@/types'
 import { useParams } from 'next/navigation'
@@ -43,7 +44,7 @@ export default function SongPage({}: Props) {
         style={createCustomStyles(hub?.color)}
       >
         <SongHeader content={song} />
-        {/* <SongReferences references={song.references} /> */}
+        <SongAudio songId={song.id} items={song.tracks} />
         <SongLyrics songId={song.id} items={song.sections} />
       </main>
     </SongPageProvider>

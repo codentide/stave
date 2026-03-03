@@ -1,6 +1,6 @@
 'use client'
 
-import { LyricSection, Song, createSongSchema } from '@/types'
+import { LyricSection, Song, Track, createSongSchema } from '@/types'
 import { useSetAtom } from 'jotai'
 import { v4 as uuid } from 'uuid'
 import { hubsAtom } from '../hub'
@@ -28,7 +28,7 @@ export const useCreateSong = () => {
       key: validated.key,
       tags: validated.tags,
       sections: [],
-      references: [],
+      tracks: [],
       createdAt: new Date().toISOString(),
     }
 
@@ -114,6 +114,66 @@ export const useUpdateSongCover = () => {
         return {
           ...h,
           songs: h.songs.map((s) => (s.id === songId ? { ...s, coverUrl } : s)),
+        }
+      })
+    )
+  }
+}
+
+/**
+ * Add a track to a song
+ */
+export const useAddSongTrack = () => {
+  const setHubs = useSetAtom(hubsAtom)
+
+  return (hubId: string, songId: string, track: Omit<Track, 'id' | 'songId'>) => {
+    const newTrack: Track = {
+      id: uuid(),
+      songId,
+      ...track,
+    }
+
+    setHubs((prev) =>
+      prev.map((h) => {
+        if (h.id !== hubId) return h
+        return {
+          ...h,
+          songs: h.songs.map((s) =>
+            s.id === songId
+              ? {
+                  ...s,
+                  tracks: [...(s.tracks || []), newTrack],
+                }
+              : s
+          ),
+        }
+      })
+    )
+
+    return newTrack
+  }
+}
+
+/**
+ * Remove a track from a song
+ */
+export const useRemoveSongTrack = () => {
+  const setHubs = useSetAtom(hubsAtom)
+
+  return (hubId: string, songId: string, trackId: string) => {
+    setHubs((prev) =>
+      prev.map((h) => {
+        if (h.id !== hubId) return h
+        return {
+          ...h,
+          songs: h.songs.map((s) =>
+            s.id === songId
+              ? {
+                  ...s,
+                  tracks: (s.tracks || []).filter((t) => t.id !== trackId),
+                }
+              : s
+          ),
         }
       })
     )
