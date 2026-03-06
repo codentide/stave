@@ -1,263 +1,142 @@
-# 🎵 STAVE HUBS - Music Development Suite
+<div align="center">
+  <h3 style="font-size:32px;">
+    <strong>Stave</strong>
+  </h3>
+  <p>A web suite for creating, organizing, and editing music projects. Manage hubs (albums, EPs, singles) with songs that include detailed metadata, section-based lyrics, and audio playback via YouTube. Built for artists and producers who want a clean, frictionless workflow.</p>
 
-A modern web application for creating, organizing, and editing music projects. Perfect for solo artists, small bands, and music producers who need a professional yet intuitive tool for managing albums, EPs, and singles.
+  <div align="center">
 
-## ✨ Features
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-323232?style=for-the-badge&logo=react&logoColor=2361DAFB)](https://es.react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-0ea5e9?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Jotai](https://img.shields.io/badge/Jotai-323232?style=for-the-badge&logo=react&logoColor=white)](https://jotai.org/)
+[![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)](https://zod.dev/)
 
-### Core Functionality
+  </div>
+</div>
 
-- **Hub Management** - Create and manage music projects (albums, EPs, singles)
-- **Song Management** - Full CRUD for songs within projects
-- **Metadata Editing** - Edit song details inline: title, BPM, key, status, tags
-- **Lyrics Editor** - Add and edit lyric sections (Intro, Verse, Chorus, etc.)
-- **Cover Images** - Upload song cover art (stored as Data URL)
-- **Export** - Download lyrics as `.txt` files
-- **Tag System** - Organize songs with custom tags
+## Features
 
-### Technical Features
+- **Hubs**: Create and organize albums, EPs, or singles with name, color, and type
+- **Songs**: Full CRUD with musical metadata (BPM, key, status, tags)
+- **Lyrics**: Section-based editor (Intro, Verse, Chorus, Bridge, Outro) with auto-resize and custom ordering
+- **Audio Player**: Add YouTube tracks to any song and play them directly with play/pause, seek, and track navigation controls
+- **Local persistence**: All data saved to localStorage — no server required
+- **Dark / light mode**: Full theme support
 
-- **Local Storage** - All data persists in browser (no server needed for MVP)
-- **Dark Mode** - Beautiful light/dark theme support
-- **Responsive Design** - Works on desktop and tablet
-- **Type Safety** - Full TypeScript with Zod validation
-- **Performance** - Optimized components with React.memo and debouncing
-- **Error Boundaries** - Graceful error handling across the app
+## Audio Player
 
-## 🚀 Quick Start
+Each song can have multiple audio tracks linked from YouTube.
 
-### Prerequisites
+- Paste a YouTube link and the app fetches the title automatically via oEmbed
+- Playback controls: play/pause, previous, next, and timeline seek
+- Player runs in the background at the lowest possible quality to conserve resources
+- **Coming soon:** local audio file upload support
 
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
-```bash
-# Clone and install
-git clone <repo>
-cd stave
-npm install
-
-# Start development server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## 📖 Usage
-
-### Creating a Project
-
-1. Click "Crear Nuevo Proyecto" on the dashboard
-2. Fill in name, type (Album/EP/Single), and color
-3. Start adding songs
-
-### Managing Songs
-
-1. Open a project to see songs list
-2. Click "Crear Canción" or click an existing song
-3. Edit metadata inline or add lyrics
-
-### Editing Lyrics
-
-- Click "+ Nueva Sección" to add lyric sections
-- Choose section type (Intro, Verse, Chorus)
-- Edit content with auto-expand textarea
-- Delete sections with the remove button
-
-### Exporting
-
-- Open a song
-- Click menu icon (⋮)
-- Select "Exportar Letra" to download as .txt
-
-## 🏗️ Architecture
-
-### Stack
-
-- **Framework:** Next.js 16.1.6 (App Router)
-- **UI:** React 19.2.3 with TypeScript 5
-- **Styling:** Tailwind CSS 4
-- **State:** Jotai (primitive atoms + localStorage)
-- **Validation:** Zod (runtime type safety)
-- **Components:** shadcn/ui + Radix UI
-- **Icons:** Lucide React
-
-### Folder Structure
+## Project structure
 
 ```
-src/
-├── app/                    # Next.js pages & layouts
-│   ├── layout.tsx         # Root layout
-│   ├── dashboard/         # Dashboard pages
-│   └── globals.css        # Global styles
+stave/
+├── app/
+│   ├── layout.tsx
+│   └── dashboard/
+│       ├── page.tsx            # Hub list
+│       └── [hubId]/
+│           ├── page.tsx        # Hub detail (songs)
+│           └── [songId]/
+│               └── page.tsx    # Song editor
 ├── components/
-│   ├── ui/               # Base components (shadcn)
-│   ├── shared/           # Reusable components
-│   └── features/         # Feature-specific components
-├── atoms/                # Jotai state management
-│   ├── features/         # Domain atoms (hub, song)
-│   └── providers/        # Provider context factories
+│   ├── ui/                     # Base components (shadcn/ui)
+│   ├── shared/                 # Reusable components
+│   └── features/
+│       ├── hub/                # HubCard, HubHeader, CreateHubModal
+│       ├── song/               # SongHeader, SongLyrics, SongCard
+│       └── audio/              # AudioPlayer, TrackCard, AddTrackForm
 ├── lib/
-│   ├── constants/        # App constants
-│   ├── utils/           # Helper functions
-│   └── hooks/           # Custom React hooks
-├── types/               # TypeScript & Zod schemas
-└── styles/              # Tailwind config
+│   ├── atoms/                  # Global state (Jotai)
+│   ├── constants/              # App constants (keys, tags, types)
+│   └── utils/                  # Helpers (format, audio, ui)
+└── types/                      # Zod schemas + TypeScript types
 ```
 
-### State Management
+## Installation
 
-**Jotai Atoms** - Simple, composable state with zero boilerplate:
+1. Clone the repository:
 
-- Primitives: `atom<T>(initialValue)`
-- Persistence: `atomWithStorage(key, initialValue)`
-- Domain-based organization: `atoms/features/hub/`, `atoms/features/song/`
+   ```bash
+   git clone https://github.com/codentide/stave.git
+   cd stave
+   ```
 
-**Data Layer Abstraction** - All mutations via hooks in `atoms/features/`:
+2. Install dependencies:
 
-- `useCreateHub()`, `useUpdateHubMeta()`, `useDeleteHub()`
-- `useCreateSong()`, `useUpdateSongMeta()`, `useUpdateSongLyrics()`
-- Future-proof: Can swap localStorage → Supabase without component changes
+   ```bash
+   npm install
+   ```
 
-### Performance
+3. Start the development server:
 
-- ✅ Memoized components (SongCard)
-- ✅ Debounced edits (600ms for metadata)
-- ✅ Lazy-loaded features
-- ✅ Efficient re-renders with Jotai subscriptions
+   ```bash
+   npm run dev
+   ```
 
-## 💾 Data Persistence
+4. Open `http://localhost:3000` in your browser
 
-Currently, all data is stored in **browser localStorage**:
+## Usage
 
-```
-Key: "stave:hubs" → JSON array of hubs with songs
-```
+### Hubs
 
-**Post-MVP:** Will migrate to Supabase with:
+- **Create:** Click the empty card on the dashboard, pick a name, type, and color
+- **Edit:** Click directly on the hub name or color to edit inline
+- **Delete:** Use the options menu on the hub card
 
-- PostgreSQL database
-- Cloud Storage for images
-- Real-time sync (Supabase listeners)
-- Multi-user support
+### Songs
 
-## 🛠️ Development
+- **Create:** Inside a hub, click the new song card
+- **Edit metadata:** Click any field (title, BPM, key, status, tags) to edit inline
+- **Delete:** Use the options menu inside the song
 
-### Available Scripts
+### Lyrics
+
+- **Add section:** Click `+ Add section` to add an Intro, Verse, Chorus, etc.
+- **Change type:** Click the section label to change it
+- **Edit content:** The textarea grows automatically as you type
+- **Delete section:** Hover over the section and click the delete icon
+
+### Audio Player
+
+- **Add track:** Click `Add audio track`, paste a YouTube link, and click `Add`
+- **Play:** Click any track in the list to start playback
+- **Controls:** Play/pause, previous, next, and seek from the player
+- **Delete track:** Hover over the track and click the delete icon
+
+## Scripts
 
 ```bash
-# Development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Lint code
-npm run lint
-
-# Start production server
-npm start
+npm run dev        # Development server
+npm run build      # Production build
+npm run lint       # ESLint check
 ```
 
-### Code Style
+## Roadmap
 
-- **TypeScript:** Strict mode, no `any` types
-- **Components:** Functional with hooks, minimal props
-- **Naming:** camelCase for vars/functions, PascalCase for components
-- **Comments:** Only non-obvious logic, explain WHY not WHAT
-- **Styling:** Tailwind only, no inline styles
-
-### Making Changes
-
-1. Create feature branch: `git checkout -b feature/description`
-2. Follow existing patterns (see `CLAUDE.md`)
-3. Test locally: `npm run dev`
-4. Run linter: `npm run lint`
-5. Commit with clear message: `git commit -m "type: description"`
-
-## 📚 Documentation
-
-- **[CLAUDE.md](./CLAUDE.md)** - Architecture decisions, project vision, workflow
-- **[TODO.md](./TODO.md)** - Post-MVP tasks and roadmap
-- **[JOTAI_MIGRATION.md](./JOTAI_MIGRATION.md)** - State management patterns
-- **[MIGRATION_PLAN.md](./MIGRATION_PLAN.md)** - Supabase integration roadmap
-
-## 🗺️ Roadmap
-
-### Phase 1: MVP Local ✅ COMPLETE
-
+### Phase 1: Local MVP ✅
 - Hub and song management
-- Metadata and lyrics editing
-- Cover images
-- Local persistence
-- Error boundaries
+- Metadata and section-based lyrics
+- Audio player with YouTube
+- localStorage persistence
 
-### Phase 2: Supabase Backend (Next)
-
-- PostgreSQL integration
-- Cloud storage for images
-- React Query setup
+### Phase 2: Supabase Backend
+- PostgreSQL database
 - User authentication
+- Local audio file upload and storage
 
-### Phase 3: Collaboration (Future)
+### Phase 3: Collaboration
+- Real-time co-editing
+- Project sharing
+- Change history
 
-- Real-time multiplayer editing
-- User sharing and permissions
-- Comments and feedback
-- Revision history
+## License
 
-## 🐛 Troubleshooting
-
-### Data not persisting?
-
-- Check browser localStorage settings (not disabled)
-- Open DevTools → Application → LocalStorage → look for "stave:hubs"
-
-### Components not updating?
-
-- Verify atom is imported from correct path
-- Check Jotai hooks are inside components (not root level)
-- Use React DevTools to inspect atom state
-
-### Styling looks wrong?
-
-- Clear browser cache
-- Run `npm run dev` and hard refresh (Ctrl+Shift+R)
-
-## 🤝 Development
-
-This is a **proprietary project** in active development. Contributions are not currently accepted.
-
-For architecture decisions and development guidelines, see `CLAUDE.md`.
-
-## 📄 License & Intellectual Property
-
-**All rights reserved.** This project is proprietary software.
-
-- ❌ No license to use, copy, or distribute
-- ❌ Not open source
-- 🚀 Future SaaS product in development
-
-Unauthorized copying, modification, or distribution is prohibited.
-
-For inquiries about licensing or usage, contact the project owner.
-
-## 🙏 Credits
-
-Built with:
-
-- [Next.js](https://nextjs.org/)
-- [React](https://react.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Jotai](https://jotai.org/)
-- [Zod](https://zod.dev/)
-- [shadcn/ui](https://ui.shadcn.com/)
-
----
-
-**Current Version:** 1.0.0 (MVP Local)
-**Last Updated:** March 1, 2026
-**Status:** Active Development
-
-For questions or feedback, see the documentation files above.
+All rights reserved. Proprietary project under active development.
