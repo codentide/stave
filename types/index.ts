@@ -2,7 +2,14 @@ import { z } from 'zod'
 
 // Enums
 export const HubTypeEnum = z.enum(['ALBUM', 'EP', 'SINGLE'])
-export const LyricSectionTypeEnum = z.enum(['INTRO', 'VERSO', 'CORO'])
+export const LyricSectionTypeEnum = z.enum([
+  'INTRO',
+  'VERSO',
+  'CORO',
+  'PRE-CORO',
+  'PUENTE',
+  'OUTRO',
+])
 export const SongStatusTypeEnum = z.enum([
   'IDEA',
   'DRAFT',
@@ -10,7 +17,7 @@ export const SongStatusTypeEnum = z.enum([
   'REVISION',
   'ENDED',
 ])
-export const ReferenceTypeEnum = z.enum(['YOUTUBE', 'FILE'])
+export const TrackTypeEnum = z.enum(['YOUTUBE', 'FILE'])
 
 // Utils
 const idSchema = z.uuid('ID inválido')
@@ -26,10 +33,10 @@ export const lyricSectionSchema = z.object({
   order: z.number().int(),
 })
 
-export const referenceSchema = z.object({
+export const trackSchema = z.object({
   id: idSchema,
   songId: idSchema.optional(),
-  type: ReferenceTypeEnum,
+  type: TrackTypeEnum,
   // url: z.url('URL de referencia inválida'),
   url: z.string().min(1, 'La ruta de la referencia es obligatoria'),
   name: z.string().min(1, 'El nombre de la referencia es obligatorio'),
@@ -45,7 +52,7 @@ export const songSchema = z.object({
   key: z.string().max(10).default('C'),
   tags: z.array(z.string()).default([]),
   sections: z.array(lyricSectionSchema).default([]),
-  references: z.array(referenceSchema).default([]),
+  tracks: z.array(trackSchema).default([]),
   coverUrl: z.string().optional(),
   createdAt: dateSchema,
 })
@@ -76,10 +83,10 @@ export const hubSchema = hubSchemaBase.refine(
 // Inferences
 export type HubType = z.infer<typeof HubTypeEnum>
 export type LyricSectionType = z.infer<typeof LyricSectionTypeEnum>
-export type ReferenceType = z.infer<typeof ReferenceTypeEnum>
+export type TrackType = z.infer<typeof TrackTypeEnum>
 
 export type LyricSection = z.infer<typeof lyricSectionSchema>
-export type Reference = z.infer<typeof referenceSchema>
+export type Track = z.infer<typeof trackSchema>
 export type Song = z.infer<typeof songSchema>
 export type Hub = z.infer<typeof hubSchema>
 
@@ -94,7 +101,7 @@ export const createSongSchema = songSchema.omit({
   id: true,
   hubId: true,
   sections: true,
-  references: true,
+  tracks: true,
   createdAt: true,
 })
 

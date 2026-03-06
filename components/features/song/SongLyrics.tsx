@@ -1,6 +1,10 @@
 'use client'
 
-import { LyricSection as LyricSectionType, Song } from '@/types'
+import {
+  LyricSection as LyricSectionType,
+  LyricSectionTypeEnum,
+  Song,
+} from '@/types'
 import { capitalize } from '@/lib/utils'
 import { useUpdateSongLyrics } from '@/atoms'
 import { useAtom } from 'jotai'
@@ -16,7 +20,7 @@ interface Props {
   items: LyricSectionType[]
 }
 
-const SECTION_TYPES = ['INTRO', 'VERSO', 'CORO'] as const
+const SECTION_TYPES = LyricSectionTypeEnum.options
 
 export const SongLyrics = ({ songId, items }: Props) => {
   // ✅ Get atoms from provider (no props needed)
@@ -85,9 +89,9 @@ export const SongLyrics = ({ songId, items }: Props) => {
                 key={section.id}
                 className="group flex gap-4 py-4 border-b border-border/30 last:border-b-0"
               >
-                <div className="w-16 shrink-0">
+                <div className="w-20 shrink-0">
                   <EditableSelect
-                    displayClassName="text-xs font-semibold text-primary uppercase tracking-wider group-hover:text-primary"
+                    displayClassName="text-xs text-nowrap font-semibold text-primary uppercase tracking-wider group-hover:text-primary"
                     value={section.type}
                     onChange={(newType) =>
                       handleUpdateSection(section.id, { type: newType })
@@ -128,7 +132,7 @@ export const SongLyrics = ({ songId, items }: Props) => {
           <Button
             onClick={handleAddSection}
             variant="ghost"
-            className="w-fit text-foreground/60 hover:text-foreground px-0"
+            className="w-fit text-foreground/60 hover:text-foreground"
           >
             + Agregar sección
           </Button>
